@@ -39,10 +39,11 @@ class Ball(pygame.sprite.Sprite):
             return self.surface
 
     
-class Board():
+class Board(Game):
     """
         - "Boarden" Består av 2 spelare och en boll
         - Ritar ut sträcket i mitten som avskiljar spelarna och texten
+        - Boarden ritas ut i spelet
     """
     def __init__(self):
         self.background_color = 0,0,0
@@ -96,10 +97,14 @@ class Game():
         
 
     def redraw(self):
-        # ball.update()
-        # player1.update()
-        # player2.update()
+        #board.update()
         pass
 
-x = Game(1200, 500)
-x.run()
+
+def main():
+    x = Game(1200, 500)
+    x.run()
+
+
+if __name__ == "__main__":
+    main()
