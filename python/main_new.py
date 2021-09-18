@@ -10,7 +10,7 @@ class Ball:
         self.radius = radius
         self.show()
 
-        self.xSpeed = 1
+        self.xSpeed = -1
         self.ySpeed = 0
 
     def show(self):
@@ -18,12 +18,18 @@ class Ball:
 
 
     def update(self):
-        if self.x > WIDTH:
-            self.x = WIDTH-1
+        print((self.x, WIDTH), (self.y, HEIGHT))
+        # Om x positionen på bollen är större eller lika med bredden
+        if self.x >= WIDTH and self.xSpeed == 1:
+            self.x = WIDTH - self.radius
             self.xSpeed = -1
-        elif self.x < WIDTH:
-            self.x = 1
+            print(self.xSpeed)
+
+        if self.x <= WIDTH and self.xSpeed == -1:
+            self.x = self.radius
             self.xSpeed = 1
+            print(self.xSpeed)
+
 
         self.x += self.xSpeed
         self.y += self.ySpeed
@@ -60,8 +66,13 @@ HEIGHT = 500
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
+clock = pygame.time.Clock()
+
+
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("PONG")
+
+clock.tick(30)
 
 
 def mid_line():
@@ -72,7 +83,7 @@ ball = Ball(screen, WHITE, WIDTH//2, HEIGHT//2 , 15)
 paddle1 = Paddle(screen, WHITE, 15, HEIGHT//2 - 60, 20, 120)
 paddle2 = Paddle( screen, WHITE, WIDTH - 20 - 15, HEIGHT//2 - 60, 20, 120 )
 
-def update():
+def game_update():
     screen.fill(BLACK)
     ball.update()
     paddle1.update(0, 0)
@@ -83,7 +94,7 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
-    time.sleep(0.5)
-    update()
+    time.sleep(0.01)
+    game_update()
 
     pygame.display.update()
