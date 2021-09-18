@@ -1,6 +1,5 @@
 import pygame, sys, time
 
-
 class Ball:
     def __init__(self, screen, color, x, y, radius):
         self.screen = screen
@@ -20,16 +19,14 @@ class Ball:
     def update(self):
         print((self.x, WIDTH), (self.y, HEIGHT))
         # Om x positionen på bollen är större eller lika med bredden
-        if self.x >= WIDTH and self.xSpeed == 1:
+        if self.x >= WIDTH:
             self.x = WIDTH - self.radius
             self.xSpeed = -1
-            print(self.xSpeed)
 
-        if self.x <= WIDTH and self.xSpeed == -1:
+        # Om x positionen på bollen är mindre eller lika med bredden
+        if self.x <= 0:
             self.x = self.radius
             self.xSpeed = 1
-            print(self.xSpeed)
-
 
         self.x += self.xSpeed
         self.y += self.ySpeed
@@ -50,16 +47,16 @@ class Paddle:
     def show(self):
         pygame.draw.rect(self.screen, self.color, (self.x, self.y, self.width, self.height))
 
-    def update(self, newX, newY):
+    def update(self, newY):
         # if (self.y + newY) > screen.width: 
-        pygame.draw.rect(self.screen, self.color, (self.x, self.y + newY, self.width, self.height))
-
         self.y += newY
+
+
 
         
 
 pygame.init()
-
+running = True
 WIDTH = 900
 HEIGHT = 500
 
@@ -83,18 +80,40 @@ ball = Ball(screen, WHITE, WIDTH//2, HEIGHT//2 , 15)
 paddle1 = Paddle(screen, WHITE, 15, HEIGHT//2 - 60, 20, 120)
 paddle2 = Paddle( screen, WHITE, WIDTH - 20 - 15, HEIGHT//2 - 60, 20, 120 )
 
-def game_update():
-    screen.fill(BLACK)
-    ball.update()
-    paddle1.update(0, 0)
-    paddle2.update(0, 0)
-    mid_line()
+DEBUG = False
 
-while True:
+def game_update():
+    pass
+
+while running:
+    screen.fill(BLACK)
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            sys.exit()
-    time.sleep(0.01)
-    game_update()
+            running = False
+        if event.type == pygame.KEYDOWN:
+            pass
+            # if key[pygame.K_UP]:
+            #     paddle1.update(-1)
+            #     paddle2.update(-1)
+            # if key[pygame.K_DOWN]:
+            #     paddle1.update(1)
+            #     paddle2.update(1)
+    
+    key=pygame.key.get_pressed()
+
+
+    paddle1.update(key[pygame.K_DOWN] - key[pygame.K_UP])
+    paddle2.update(key[pygame.K_DOWN] - key[pygame.K_UP])
+
+
+    ball.update()
+    paddle1.show()
+    paddle2.show()
+
+    mid_line()
+
+    # time.sleep(0.01)
+
 
     pygame.display.update()
