@@ -17,7 +17,8 @@ class Ball:
 
 
     def update(self):
-        print((self.x, WIDTH), (self.y, HEIGHT))
+        # print((self.x, WIDTH), (self.y, HEIGHT))
+
         # Om x positionen på bollen är större eller lika med bredden
         if self.x >= WIDTH:
             self.x = WIDTH - self.radius
@@ -49,11 +50,85 @@ class Paddle:
 
     def update(self, newY):
         # if (self.y + newY) > screen.width: 
-        self.y += newY
+        # Kontrollerar så att inte spelaren hamnar utanför boxen
+        if self.y + self.height >= HEIGHT:
+            self.y = HEIGHT + self.height 
+        if self.y + self.height <= 0:
+            self.y = self.height
+        else:
+            self.y += newY
+
+
+class GameBoard: 
+    # Defines the middle line, and scoreboard
+    # varje gång det blir ett score så kör den update score funktionen
+    def __init__(self, screen):
+        pass
+
+    def updateScore(self):
+        pass
+    
 
 
 
-        
+class Game: 
+
+    def __init__(self, width, height, tickspeed):
+        # Pygame init och settings
+        pygame.init()
+        pygame.display.set_caption("PONG")
+
+        self.running = True
+
+        self.WIDTH = width
+        self.WIDTH_CENTER = self.WIDTH // 2
+        self.HEIGHT = height
+        self.HEIGHT_CENTER = self.WIDTH // 2
+        self.BLACK = (0, 0, 0)
+        self.WHITE = (255, 255, 255)
+
+        self.clock = pygame.time.Clock()
+
+        self.clock.tick(tickspeed)
+
+        self.DEBUG = False
+
+
+        self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
+
+        ball = Ball(self.screen, self.WHITE, self.WIDTH_CENTER, self.WIDTH_CENTER, 10)
+        playerOne = Paddle(self.screen, self.WHITE, 15, HEIGHT//2 - 60, 20, 120)
+        playerTwo = Paddle(self.screen, self.WHITE, WIDTH - 20 - 15, HEIGHT//2 - 60, 20, 120 )
+        # WIDTH - 20 - 15 ? ^^^
+
+
+    def collide(self, O1, O2):
+        pass
+
+    def DEBUG(self):
+        pass
+
+    def run(self):
+        while running:
+            self.screen.fill(self.BLACK)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_F11:
+                        DEBUG = not DEBUG
+                        print("DEBUG:", DEBUG)
+            
+            if DEBUG:
+                DEBUG()
+            # Hämtar status på alla knappar
+            key=pygame.key.get_pressed()
+
+            # time.sleep(0.01)
+
+
+            pygame.display.update()
 
 pygame.init()
 running = True
@@ -82,8 +157,8 @@ paddle2 = Paddle( screen, WHITE, WIDTH - 20 - 15, HEIGHT//2 - 60, 20, 120 )
 
 DEBUG = False
 
-def game_update():
-    pass
+# def game_update():
+#     pass
 
 while running:
     screen.fill(BLACK)
@@ -92,22 +167,20 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.KEYDOWN:
-            pass
-            # if key[pygame.K_UP]:
-            #     paddle1.update(-1)
-            #     paddle2.update(-1)
-            # if key[pygame.K_DOWN]:
-            #     paddle1.update(1)
-            #     paddle2.update(1)
-    
+            if event.key == pygame.K_F11:
+                DEBUG = not DEBUG
+                print("DEBUG:", DEBUG)
+            
+    # Hämtar status på alla knappar
     key=pygame.key.get_pressed()
 
-
+    # Kommer bli -1, 0, eller 1 vilket kommer orsaka att paddeln åker upp eller ner
     paddle1.update(key[pygame.K_DOWN] - key[pygame.K_UP])
     paddle2.update(key[pygame.K_DOWN] - key[pygame.K_UP])
 
 
     ball.update()
+
     paddle1.show()
     paddle2.show()
 
