@@ -42,6 +42,7 @@ class Paddle:
         self.y = y
         self.width = width
         self.height = height
+
         self.show()
 
     
@@ -130,63 +131,71 @@ class Game:
 
             pygame.display.update()
 
-pygame.init()
-running = True
+
+# DÅLIGT MED GLOBALA VARIABLER
 WIDTH = 900
 HEIGHT = 500
 
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
+def main():
 
-clock = pygame.time.Clock()
-
-
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("PONG")
-
-clock.tick(30)
+    pygame.init()
+    running = True
 
 
-def mid_line():
-    pygame.draw.line(screen, WHITE, (WIDTH//2, 0), (WIDTH//2, HEIGHT), 5)
-    
+    BLACK = (0, 0, 0)
+    WHITE = (255, 255, 255)
 
-ball = Ball(screen, WHITE, WIDTH//2, HEIGHT//2 , 15)
-paddle1 = Paddle(screen, WHITE, 15, HEIGHT//2 - 60, 20, 120)
-paddle2 = Paddle( screen, WHITE, WIDTH - 20 - 15, HEIGHT//2 - 60, 20, 120 )
-
-DEBUG = False
-
-# def game_update():
-#     pass
-
-while running:
-    screen.fill(BLACK)
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_F11:
-                DEBUG = not DEBUG
-                print("DEBUG:", DEBUG)
-            
-    # Hämtar status på alla knappar
-    key=pygame.key.get_pressed()
-
-    # Kommer bli -1, 0, eller 1 vilket kommer orsaka att paddeln åker upp eller ner
-    paddle1.update(key[pygame.K_DOWN] - key[pygame.K_UP])
-    paddle2.update(key[pygame.K_DOWN] - key[pygame.K_UP])
+    clock = pygame.time.Clock()
 
 
-    ball.update()
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("PONG")
 
-    paddle1.show()
-    paddle2.show()
-
-    mid_line()
-
-    # time.sleep(0.01)
+    clock.tick(30)
 
 
-    pygame.display.update()
+    def mid_line():
+        pygame.draw.line(screen, WHITE, (WIDTH//2, 0), (WIDTH//2, HEIGHT), 5)
+        
+
+    ball = Ball(screen, WHITE, WIDTH//2, HEIGHT//2 , 15)
+    paddle1 = Paddle(screen, WHITE, 15, HEIGHT//2 - 60, 20, 120)
+    paddle2 = Paddle( screen, WHITE, WIDTH - 20 - 15, HEIGHT//2 - 60, 20, 120 )
+
+    DEBUG = False
+
+    # def game_update():
+    #     pass
+    while running:
+        screen.fill(BLACK)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_F11:
+                    DEBUG = not DEBUG
+                    print("DEBUG:", DEBUG)
+                
+        # Hämtar status på alla knappar
+        key=pygame.key.get_pressed()
+
+        # Kommer bli -1, 0, eller 1 vilket kommer orsaka att paddeln åker upp eller ner
+        paddle1.update(key[pygame.K_DOWN] - key[pygame.K_UP])
+        paddle2.update(key[pygame.K_DOWN] - key[pygame.K_UP])
+
+
+        ball.update()
+
+        paddle1.show()
+        paddle2.show()
+
+        mid_line()
+
+        # time.sleep(0.01)
+
+
+        pygame.display.update()
+
+if __name__ == "__main__":
+    main()
