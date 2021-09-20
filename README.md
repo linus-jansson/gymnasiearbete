@@ -8,6 +8,7 @@ Pong in different programminglanguages
 - [Pygame python](https://www.pygame.org/docs/)
 - [p5.js javascript](https://p5js.org/)
 - [pygame movment](https://stackoverflow.com/questions/16044229/how-to-get-keyboard-input-in-pygame)
+- [Fixed FPS pygame(VI MÅSTE HA DETTA :-) )](https://stackoverflow.com/questions/35617246/setting-a-fixed-fps-in-pygame-python-3)
 
 
 ## Frågeställningar 
