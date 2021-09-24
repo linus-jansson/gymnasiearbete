@@ -1,4 +1,5 @@
 import pygame, sys, time
+from random import randint
 
 class Ball:
     def __init__(self, screen, color, x, y, radius):
@@ -9,8 +10,8 @@ class Ball:
         self.radius = radius
         self.show()
 
-        self.xSpeed = -1
-        self.ySpeed = 0
+        self.xSpeed = 1
+        self.ySpeed = 1
 
     def show(self):
         pygame.draw.circle(self.screen, self.color, (self.x, self.y), self.radius)
@@ -19,15 +20,26 @@ class Ball:
     def update(self):
         # print((self.x, WIDTH), (self.y, HEIGHT))
 
+        # Kolla om det finns något bättre sätt
         # Om x positionen på bollen är större eller lika med bredden
         if self.x >= WIDTH:
             self.x = WIDTH - self.radius
-            self.xSpeed = -1
+            self.xSpeed = -self.xSpeed
 
         # Om x positionen på bollen är mindre eller lika med bredden
         if self.x <= 0:
             self.x = self.radius
-            self.xSpeed = 1
+            self.xSpeed = -self.xSpeed
+
+        if self.y >= HEIGHT:
+            self.y = HEIGHT - self.radius
+            self.ySpeed = -self.ySpeed
+
+        # Om x positionen på bollen är mindre eller lika med bredden
+        if self.y <= 0:
+            self.y = self.radius
+            self.ySpeed = -self.ySpeed
+
 
         self.x += self.xSpeed
         self.y += self.ySpeed
@@ -43,22 +55,37 @@ class Paddle:
         self.width = width
         self.height = height
 
+
+        self.speed = 1
+
         self.show()
+
+        self.r = pygame.Rect((self.x, self.y), (self.width, self.height))
 
     
     def show(self):
-        pygame.draw.rect(self.screen, self.color, (self.x, self.y, self.width, self.height))
+        self.rect = pygame.draw.rect(self.screen, self.color, (self.x, self.y, self.width, self.height))
+    
+    # def show(self):
+    #     self.r = pygame.draw.rect(self.screen, self.color, self.r)
+
+
 
     def update(self, newY):
         # if (self.y + newY) > screen.width: 
         # Kontrollerar så att inte spelaren hamnar utanför boxen
-        if self.y + self.height >= HEIGHT:
-            self.y = HEIGHT + self.height 
-        if self.y + self.height <= 0:
-            self.y = self.height
+        if self.y >= HEIGHT - self.height:
+            self.y = HEIGHT - self.height
+        if self.y < 0:
+            self.y = 0
         else:
             self.y += newY
 
+    def getRect(self):
+        return self.r
+
+    def collide(self, obj):
+        return self.r.colliderect(obj)
 
 class GameBoard: 
     # Defines the middle line, and scoreboard
@@ -133,8 +160,8 @@ class Game:
 
 
 # DÅLIGT MED GLOBALA VARIABLER
-WIDTH = 900
-HEIGHT = 500
+WIDTH = 1080
+HEIGHT = 720
 
 def main():
 
@@ -151,7 +178,6 @@ def main():
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("PONG")
 
-    clock.tick(30)
 
 
     def mid_line():
@@ -167,6 +193,8 @@ def main():
     # def game_update():
     #     pass
     while running:
+        dt = clock.tick(500)
+
         screen.fill(BLACK)
 
         for event in pygame.event.get():
@@ -181,11 +209,15 @@ def main():
         key=pygame.key.get_pressed()
 
         # Kommer bli -1, 0, eller 1 vilket kommer orsaka att paddeln åker upp eller ner
-        paddle1.update(key[pygame.K_DOWN] - key[pygame.K_UP])
-        paddle2.update(key[pygame.K_DOWN] - key[pygame.K_UP])
+        paddle1.update((key[pygame.K_s] - key[pygame.K_w]) * dt)
+        paddle2.update((key[pygame.K_DOWN] - key[pygame.K_UP]) *dt)
 
 
         ball.update()
+
+        # print(paddle1.collide(ball.getRect()))
+        # print(paddle2.collide(ball.getRect()))
+
 
         paddle1.show()
         paddle2.show()
