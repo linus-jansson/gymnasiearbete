@@ -1,3 +1,4 @@
+
 import pygame, sys, time
 from random import randint
 
@@ -5,46 +6,74 @@ class Ball:
     def __init__(self, screen, color, x, y, radius):
         self.screen = screen
         self.color = color
+        self.standardX = x
+        self.standardY = y
         self.x = x
         self.y = y
         self.radius = radius
+        self.xSpeed = 0
+        self.ySpeed = 0
+
+        self.speed = 2
+
+        self.direction = [randint(-5, 5), randint(-2, 2)]
+
+        self.obj = pygame.draw.circle(self.screen, self.color, (self.x, self.y), self.radius)
+
+        self.reset()
         self.show()
 
-        self.xSpeed = 1
-        self.ySpeed = 1
+
 
     def show(self):
-        pygame.draw.circle(self.screen, self.color, (self.x, self.y), self.radius)
+        self.obj = pygame.draw.circle(self.screen, self.color, (self.x, self.y), self.radius)
 
 
-    def update(self):
-        # print((self.x, WIDTH), (self.y, HEIGHT))
+    def reset(self):
+        self.x = self.standardX
+        self.y = self.standardY
 
-        # Kolla om det finns något bättre sätt
+        self.direction = [ -self.direction[0],  randint(-5, 5)]
+
+        # Ser till så att direction antingen x eller y aldrig är 0
+        for count, dire in enumerate(self.direction):
+            while dire == 0:
+                print(dire)
+                dire = randint(-5, 5)
+                self.direction[count] = dire
+
+        self.speed = 2
+        
+
+
+    def update(self, dt):
         # Om x positionen på bollen är större eller lika med bredden
-        if self.x >= WIDTH:
-            self.x = WIDTH - self.radius
-            self.xSpeed = -self.xSpeed
-
         # Om x positionen på bollen är mindre eller lika med bredden
-        if self.x <= 0:
-            self.x = self.radius
-            self.xSpeed = -self.xSpeed
+        if self.x >= WIDTH or self.x <= 0:
+            self.reset()
+            # time.sleep(0.5)
+            
 
         if self.y >= HEIGHT:
             self.y = HEIGHT - self.radius
-            self.ySpeed = -self.ySpeed
+            self.direction[1] = -self.direction[1]
 
-        # Om x positionen på bollen är mindre eller lika med bredden
+        # Om y positionen på bollen är mindre eller lika med bredden
         if self.y <= 0:
             self.y = self.radius
-            self.ySpeed = -self.ySpeed
+            self.direction[1] = -self.direction[1]
 
 
-        self.x += self.xSpeed
-        self.y += self.ySpeed
+        self.x += self.direction[0] * self.speed 
+        self.y += self.direction[1] * self.speed 
     
-        pygame.draw.circle(self.screen, self.color, (self.x, self.y), self.radius)
+        self.show()
+
+    def getObj(self):
+        return self.obj
+    
+    def collide(self, obj2):
+        return self.obj.colliderect(obj2)
 
 class Paddle:
     def __init__(self, screen, color, x, y, width, height):
@@ -52,24 +81,20 @@ class Paddle:
         self.color = color
         self.x = x
         self.y = y
+        self.score = 0
         self.width = width
         self.height = height
-
+        self.obj = pygame.Rect((self.x, self.y), (self.width, self.height))
 
         self.speed = 1
 
         self.show()
 
-        self.r = pygame.Rect((self.x, self.y), (self.width, self.height))
-
+    # def show(self):
+    #     self.rect = pygame.draw.rect(self.screen, self.color, (self.x, self.y, self.width, self.height))
     
     def show(self):
-        self.rect = pygame.draw.rect(self.screen, self.color, (self.x, self.y, self.width, self.height))
-    
-    # def show(self):
-    #     self.r = pygame.draw.rect(self.screen, self.color, self.r)
-
-
+        self.obj = pygame.draw.rect(self.screen, self.color, (self.x, self.y, self.width, self.height))
 
     def update(self, newY):
         # if (self.y + newY) > screen.width: 
@@ -81,24 +106,37 @@ class Paddle:
         else:
             self.y += newY
 
-    def getRect(self):
-        return self.r
+        self.show()
 
-    def collide(self, obj):
-        return self.r.colliderect(obj)
+    def getObj(self):
+        return self.obj
+
+    def collide(self, obj2):
+        return self.obj.colliderect(obj2)
+
+    def incrementScore(self):
+        self.score += 1
+        return self.score
 
 class GameBoard: 
     # Defines the middle line, and scoreboard
     # varje gång det blir ett score så kör den update score funktionen
     def __init__(self, screen):
-        pass
+        self.p1_score = 0
+        self.p2_score = 0
+        self.WHITE = (255, 255, 255)
+        self.myfont = pygame.font.SysFont('Comic Sans MS', 30)
+        self.text = self.myfont.render(str("scoreA"), 1, self.WHITE)
+        self.screen.blit(self.text, (250,10))
+        self.text = self.myfont.render(str("scoreB"), 1, self.WHITE)
+        self.screen.blit(self.text, (420,10))
 
     def updateScore(self):
-        pass
+        if self.x >= WIDTH:
+            self.p1_score += 1
+        elif self.x <= 0:
+            self.p2_score += 1
     
-
-
-
 class Game: 
 
     def __init__(self, width, height, tickspeed):
@@ -193,7 +231,7 @@ def main():
     # def game_update():
     #     pass
     while running:
-        dt = clock.tick(500)
+        dt = clock.tick(60)
 
         screen.fill(BLACK)
 
@@ -210,17 +248,16 @@ def main():
 
         # Kommer bli -1, 0, eller 1 vilket kommer orsaka att paddeln åker upp eller ner
         paddle1.update((key[pygame.K_s] - key[pygame.K_w]) * dt)
+
         paddle2.update((key[pygame.K_DOWN] - key[pygame.K_UP]) *dt)
 
+        # print(paddle1.getObj(), paddle2.getObj())
+        if (ball.collide(paddle1.getObj()) != 0 or ball.collide(paddle2.getObj()) != 0):
+            print("paddle collission")
+            ball.direction[0] *= -1
+            ball.speed *= 1.05
 
-        ball.update()
-
-        # print(paddle1.collide(ball.getRect()))
-        # print(paddle2.collide(ball.getRect()))
-
-
-        paddle1.show()
-        paddle2.show()
+        ball.update(dt)
 
         mid_line()
 
@@ -230,4 +267,4 @@ def main():
         pygame.display.update()
 
 if __name__ == "__main__":
-    main()
+    main()      
