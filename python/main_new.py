@@ -240,13 +240,16 @@ def main():
 
     p1_score = 0
     p2_score = 0
+    score = 0
     WHITE = (255, 255, 255)
     font = pygame.font.SysFont('Comic Sans MS', 30)
-    textsurface = font.render('Some Text', False, WHITE)
+
 
     # def game_update():
     #     pass
     while running:
+        p1_score = font.render(str(score), False, WHITE)
+        p2_score = font.render(str(score), False, WHITE)
         dt = clock.tick(60)
 
         screen.fill(BLACK)
@@ -272,6 +275,7 @@ def main():
             print("paddle collission")
             ball.direction[0] *= -1
             ball.speed *= 1.05
+            score += 1
 
         ball.update(dt)
 
@@ -279,7 +283,9 @@ def main():
 
         # time.sleep(0.01)
 
-        screen.blit(textsurface, (420,10))
+        screen.blit(p1_score, (420,10))
+        screen.blit(p2_score, (420,10))
+
 
 
         pygame.display.update()
