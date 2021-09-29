@@ -140,6 +140,14 @@ class GameBoard:
 class Game: 
 
     def __init__(self, width, height, tickspeed):
+
+
+
+        # self.text = self.myfont.render(str("scoreA"), 1, self.WHITE)
+        # self.screen.blit(self.text, (250,10))
+        # self.text = self.myfont.render(str("scoreB"), 1, self.WHITE)
+
+
         # Pygame init och settings
         pygame.init()
         pygame.display.set_caption("PONG")
@@ -166,6 +174,8 @@ class Game:
         playerOne = Paddle(self.screen, self.WHITE, 15, HEIGHT//2 - 60, 20, 120)
         playerTwo = Paddle(self.screen, self.WHITE, WIDTH - 20 - 15, HEIGHT//2 - 60, 20, 120 )
         # WIDTH - 20 - 15 ? ^^^
+
+ 
 
 
     def collide(self, O1, O2):
@@ -228,6 +238,12 @@ def main():
 
     DEBUG = False
 
+    p1_score = 0
+    p2_score = 0
+    WHITE = (255, 255, 255)
+    font = pygame.font.SysFont('Comic Sans MS', 30)
+    textsurface = font.render('Some Text', False, WHITE)
+
     # def game_update():
     #     pass
     while running:
@@ -262,6 +278,8 @@ def main():
         mid_line()
 
         # time.sleep(0.01)
+
+        screen.blit(textsurface, (420,10))
 
 
         pygame.display.update()
