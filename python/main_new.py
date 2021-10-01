@@ -51,6 +51,7 @@ class Ball:
         # Om x positionen på bollen är mindre eller lika med bredden
         if self.x >= WIDTH or self.x <= 0:
             self.reset()
+            
             # time.sleep(0.5)
             
 
@@ -96,13 +97,17 @@ class Paddle:
     def show(self):
         self.obj = pygame.draw.rect(self.screen, self.color, (self.x, self.y, self.width, self.height))
 
+    
+
     def update(self, newY):
         # if (self.y + newY) > screen.width: 
         # Kontrollerar så att inte spelaren hamnar utanför boxen
         if self.y >= HEIGHT - self.height:
             self.y = HEIGHT - self.height
+        
         if self.y < 0:
             self.y = 0
+        
         else:
             self.y += newY
 
@@ -118,99 +123,14 @@ class Paddle:
         self.score += 1
         return self.score
 
-class GameBoard: 
-    # Defines the middle line, and scoreboard
-    # varje gång det blir ett score så kör den update score funktionen
-    def __init__(self, screen):
-        self.p1_score = 0
-        self.p2_score = 0
-        self.WHITE = (255, 255, 255)
-        self.myfont = pygame.font.SysFont('Comic Sans MS', 30)
-        self.text = self.myfont.render(str("scoreA"), 1, self.WHITE)
-        self.screen.blit(self.text, (250,10))
-        self.text = self.myfont.render(str("scoreB"), 1, self.WHITE)
-        self.screen.blit(self.text, (420,10))
-
-    def updateScore(self):
-        if self.x >= WIDTH:
-            self.p1_score += 1
-        elif self.x <= 0:
-            self.p2_score += 1
-    
-class Game: 
-
-    def __init__(self, width, height, tickspeed):
-
-
-
-        # self.text = self.myfont.render(str("scoreA"), 1, self.WHITE)
-        # self.screen.blit(self.text, (250,10))
-        # self.text = self.myfont.render(str("scoreB"), 1, self.WHITE)
-
-
-        # Pygame init och settings
-        pygame.init()
-        pygame.display.set_caption("PONG")
-
-        self.running = True
-
-        self.WIDTH = width
-        self.WIDTH_CENTER = self.WIDTH // 2
-        self.HEIGHT = height
-        self.HEIGHT_CENTER = self.WIDTH // 2
-        self.BLACK = (0, 0, 0)
-        self.WHITE = (255, 255, 255)
-
-        self.clock = pygame.time.Clock()
-
-        self.clock.tick(tickspeed)
-
-        self.DEBUG = False
-
-
-        self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
-
-        ball = Ball(self.screen, self.WHITE, self.WIDTH_CENTER, self.WIDTH_CENTER, 10)
-        playerOne = Paddle(self.screen, self.WHITE, 15, HEIGHT//2 - 60, 20, 120)
-        playerTwo = Paddle(self.screen, self.WHITE, WIDTH - 20 - 15, HEIGHT//2 - 60, 20, 120 )
-        # WIDTH - 20 - 15 ? ^^^
-
- 
-
-
-    def collide(self, O1, O2):
-        pass
-
-    def DEBUG(self):
-        pass
-
-    def run(self):
-        while running:
-            self.screen.fill(self.BLACK)
-
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_F11:
-                        DEBUG = not DEBUG
-                        print("DEBUG:", DEBUG)
-            
-            if DEBUG:
-                DEBUG()
-            # Hämtar status på alla knappar
-            key=pygame.key.get_pressed()
-
-            # time.sleep(0.01)
-
-
-            pygame.display.update()
-
-
 # DÅLIGT MED GLOBALA VARIABLER
 WIDTH = 1080
 HEIGHT = 720
 
+def middle(k):
+    return k // 2
+
+# GÖR OM TILL EN KLASS SEN
 def main():
 
     pygame.init()
@@ -224,7 +144,7 @@ def main():
 
 
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    pygame.display.set_caption("PONG")
+    pygame.display.set_caption("PONG - Created by Linus, Vilhelm and Erik")
 
 
 
@@ -232,24 +152,26 @@ def main():
         pygame.draw.line(screen, WHITE, (WIDTH//2, 0), (WIDTH//2, HEIGHT), 5)
         
 
-    ball = Ball(screen, WHITE, WIDTH//2, HEIGHT//2 , 15)
-    paddle1 = Paddle(screen, WHITE, 15, HEIGHT//2 - 60, 20, 120)
-    paddle2 = Paddle( screen, WHITE, WIDTH - 20 - 15, HEIGHT//2 - 60, 20, 120 )
+    ball = Ball(screen, WHITE, middle(WIDTH), middle(HEIGHT) , 15)
+    paddle1 = Paddle(screen, WHITE, 15, middle(HEIGHT) - 60, 20, 120)
+    paddle2 = Paddle( screen, WHITE, WIDTH - 20 - 15, middle(HEIGHT) - 60, 20, 120 )
 
     DEBUG = False
 
-    p1_score = 0
-    p2_score = 0
-    score = 0
     WHITE = (255, 255, 255)
-    font = pygame.font.SysFont('Comic Sans MS', 30)
+    font = pygame.font.SysFont('Monospace', 50)
+    main_menu = False
 
 
     # def game_update():
     #     pass
     while running:
-        p1_score = font.render(str(score), False, WHITE)
-        p2_score = font.render(str(score), False, WHITE)
+        
+        while main_menu:
+            print(main_menu)
+
+        p1_score_surface = font.render(str(paddle1.score), False, WHITE)
+        p2_score_surface = font.render(str(paddle2.score), False, WHITE)
         dt = clock.tick(60)
 
         screen.fill(BLACK)
@@ -261,30 +183,36 @@ def main():
                 if event.key == pygame.K_F11:
                     DEBUG = not DEBUG
                     print("DEBUG:", DEBUG)
-                
+                if event.key == pygame.K_ESCAPE:
+                    running = False
+       
+       
         # Hämtar status på alla knappar
         key=pygame.key.get_pressed()
 
         # Kommer bli -1, 0, eller 1 vilket kommer orsaka att paddeln åker upp eller ner
+        # Hanterar vilket håll som paddlarna åker åt
         paddle1.update((key[pygame.K_s] - key[pygame.K_w]) * dt)
-
         paddle2.update((key[pygame.K_DOWN] - key[pygame.K_UP]) *dt)
+        ball.update(dt) # Updates ball position
 
-        # print(paddle1.getObj(), paddle2.getObj())
+        # Kollar ifall bollen kolliderar med någon av paddlarna
         if (ball.collide(paddle1.getObj()) != 0 or ball.collide(paddle2.getObj()) != 0):
             print("paddle collission")
             ball.direction[0] *= -1
             ball.speed *= 1.05
-            score += 1
 
-        ball.update(dt)
+        if ball.x >= WIDTH:
+            paddle1.incrementScore()
+        elif ball.x <= 0:
+            paddle2.incrementScore()
 
         mid_line()
 
         # time.sleep(0.01)
 
-        screen.blit(p1_score, (420,10))
-        screen.blit(p2_score, (420,10))
+        screen.blit(p1_score_surface, (middle(middle(WIDTH)), 10))
+        screen.blit(p2_score_surface, (middle(WIDTH) + middle(WIDTH) // 2, 10))
 
 
 
