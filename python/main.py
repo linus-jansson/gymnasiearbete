@@ -1,127 +1,222 @@
-"""
-    Detta python script är spelet pong...
 
-"""
+import pygame, sys, time
+from random import randint
 
-import pygame, sys
+class Ball:
+    def __init__(self, screen, color, x, y, radius):
+        self.screen = screen
+        self.color = color
+        self.standardX = x
+        self.standardY = y
+        self.x = x
+        self.y = y
+        self.radius = radius
+        self.xSpeed = 0
+        self.ySpeed = 0
 
-class Sprite():
-    def __init__(self, RGB, width, height):
+        self.speed = 2
 
-        self.RGB = RGB
+        self.direction = [randint(-5, 5), randint(-2, 2)]
 
-        self.xPos = 0
-        self.yPos= 0
+        self.obj = pygame.draw.circle(self.screen, self.color, (self.x, self.y), self.radius)
 
-        self.width = width
-        self.height = height
-    def properties(self):
-        print((self.xPos, self.yPos, self.width, self.height))
-        return (self.xPos, self.yPos, self.width, self.height)
+        self.reset()
+        self.show()
 
-    def color(self):
-        return self.RGB
 
-class Ball(pygame.sprite.Sprite):
 
-        def __init__(self, xPos, yPos, width, height):
-            pygame.sprite.Sprite.__init__(self)
+    def show(self):
+        self.obj = pygame.draw.circle(self.screen, self.color, (self.x, self.y), self.radius)
 
-            self.xPos = xPos
-            self.yPos = yPos
-            self.width = width
-            self.height = height
-                
-            self.color = (255,255,255)
 
-            # Create an image of the block, and fill it with a color.
-            # This could also be an image loaded from the disk.
-            self.surface = pygame.Surface([self.width, self.height])
-            self.image = self.surface
-            self.image.fill(self.color)
+    def reset(self):
+        self.x = self.standardX
+        self.y = self.standardY
 
-            # Fetch the rectangle object that has the dimensions of the image
-            # Update the position of this object by setting the values of rect.x and rect.y
-            self.rect = self.image.get_rect()
+        self.direction = [ -self.direction[0],  randint(-5, 5)]
 
-        def getSurface(self):
-            return self.surface
- 
-class Board():
-    """
-        - "Boarden" Består av 2 spelare och en boll
-        - Ritar ut sträcket i mitten som avskiljar spelarna och texten
-        - Boarden ritas ut i spelet
-    """
-    def __init__(self):
-        self.background_color = 0,0,0
-        self.ball_pos = (0, 0)
+        # Ser till så att direction antingen x eller y aldrig är 0
+        for count, dire in enumerate(self.direction):
+            while dire == 0:
+                print(dire)
+                dire = randint(-5, 5)
+                self.direction[count] = dire
+
+        self.speed = 2
         
-        # # TESTING
-        # self.black = 0, 0, 0
-        # self.ball = pygame.image.load("test.gif")
-        # self.ballrect = self.ball.get_rect()
-
-        # Sätter "tickspeeden" på spelet
 
 
-    def update(self):
-        pass
-
-    def draw(self):
-        pass
-
-    def run(self):
-        pass
-
-class Game():
-
-    def __init__(self, width, height):
-        self.width = width
-        self.height = height
-
-        self.running = True
-
-        pygame.init()
-        pygame.display.set_caption("PONG")
-        self.clock = pygame.time.Clock()
-
-        self.running = True
-        self.size = (self.width, self.height)
-
-        self.surface = pygame.Surface(self.size)
-        self.screen = pygame.display.set_mode(self.size)
-
-        self.ball = Sprite((255, 255, 255), 50, 50)
-
-        self.rect = pygame.draw.rect(self.screen, self.ball.color(), self.ball.properties())
-        # Sätter "tickspeeden" på spelet
-        self.clock.tick(60)
-
-    def run(self):
-        while self.running:
-
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.running = False
-                    continue
+    def update(self, dt):
+        # Om x positionen på bollen är större eller lika med bredden
+        # Om x positionen på bollen är mindre eller lika med bredden
+        if self.x >= WIDTH or self.x <= 0:
+            self.reset()
             
-            self.ball.xPos += 1
+            # time.sleep(0.5)
+            
 
-            self.redraw()
+        if self.y >= HEIGHT:
+            self.y = HEIGHT - self.radius
+            self.direction[1] = -self.direction[1]
+
+        # Om y positionen på bollen är mindre eller lika med bredden
+        if self.y <= 0:
+            self.y = self.radius
+            self.direction[1] = -self.direction[1]
+
+
+        self.x += self.direction[0] * self.speed 
+        self.y += self.direction[1] * self.speed 
+    
+        self.show()
+
+    def getObj(self):
+        return self.obj
+    
+    def collide(self, obj2):
+        return self.obj.colliderect(obj2)
+
+class Paddle:
+    def __init__(self, screen, color, x, y, width, height):
+        self.screen = screen
+        self.color = color
+        self.x = x
+        self.y = y
+        self.score = 0
+        self.width = width
+        self.height = height
+        self.obj = pygame.Rect((self.x, self.y), (self.width, self.height))
+
+        self.speed = 1
+
+        self.show()
+
+    # def show(self):
+    #     self.rect = pygame.draw.rect(self.screen, self.color, (self.x, self.y, self.width, self.height))
+    
+    def show(self):
+        self.obj = pygame.draw.rect(self.screen, self.color, (self.x, self.y, self.width, self.height))
+
+    
+
+    def update(self, newY):
+        # if (self.y + newY) > screen.width: 
+        # Kontrollerar så att inte spelaren hamnar utanför boxen
+        if self.y >= HEIGHT - self.height:
+            self.y = HEIGHT - self.height
+        
+        if self.y < 0:
+            self.y = 0
+        
+        else:
+            self.y += newY
+
+        self.show()
+
+    def getObj(self):
+        return self.obj
+
+    def collide(self, obj2):
+        return self.obj.colliderect(obj2)
+
+    def incrementScore(self):
+        self.score += 1
+        return self.score
+
+# DÅLIGT MED GLOBALA VARIABLER
+WIDTH = 1080
+HEIGHT = 720
+
+def middle(k):
+    return k // 2
+
+# GÖR OM TILL EN KLASS SEN
+def main():
+
+    pygame.init()
+    running = True
+
+
+    BLACK = (0, 0, 0)
+    WHITE = (255, 255, 255)
+
+    clock = pygame.time.Clock()
+
+
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("PONG - Created by Linus, Vilhelm and Erik")
+
+
+
+    def mid_line():
+        pygame.draw.line(screen, WHITE, (WIDTH//2, 0), (WIDTH//2, HEIGHT), 5)
         
 
-    def redraw(self):
-        pygame.display.update(self.rect)
-        pygame.display.flip()
-        #board.update()
-        pass
+    ball = Ball(screen, WHITE, middle(WIDTH), middle(HEIGHT) , 15)
+    paddle1 = Paddle(screen, WHITE, 15, middle(HEIGHT) - 60, 20, 120)
+    paddle2 = Paddle( screen, WHITE, WIDTH - 20 - 15, middle(HEIGHT) - 60, 20, 120 )
+
+    DEBUG = False
+
+    WHITE = (255, 255, 255)
+    font = pygame.font.SysFont('Monospace', 50)
+    main_menu = False
 
 
-def main():
-    x = Game(1200, 500)
-    x.run()
+    # def game_update():
+    #     pass
+    while running:
+        
+        while main_menu:
+            print(main_menu)
 
+        p1_score_surface = font.render(str(paddle1.score), False, WHITE)
+        p2_score_surface = font.render(str(paddle2.score), False, WHITE)
+        dt = clock.tick(60)
+
+        screen.fill(BLACK)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_F11:
+                    DEBUG = not DEBUG
+                    print("DEBUG:", DEBUG)
+                if event.key == pygame.K_ESCAPE:
+                    running = False
+       
+       
+        # Hämtar status på alla knappar
+        key=pygame.key.get_pressed()
+
+        # Kommer bli -1, 0, eller 1 vilket kommer orsaka att paddeln åker upp eller ner
+        # Hanterar vilket håll som paddlarna åker åt
+        paddle1.update((key[pygame.K_s] - key[pygame.K_w]) * dt)
+        paddle2.update((key[pygame.K_DOWN] - key[pygame.K_UP]) *dt)
+        ball.update(dt) # Updates ball position
+
+        # Kollar ifall bollen kolliderar med någon av paddlarna
+        if (ball.collide(paddle1.getObj()) != 0 or ball.collide(paddle2.getObj()) != 0):
+            print("paddle collission")
+            ball.direction[0] *= -1
+            ball.speed *= 1.05
+
+        if ball.x >= WIDTH:
+            paddle1.incrementScore()
+        elif ball.x <= 0:
+            paddle2.incrementScore()
+
+        mid_line()
+
+        # time.sleep(0.01)
+
+        screen.blit(p1_score_surface, (middle(middle(WIDTH)), 10))
+        screen.blit(p2_score_surface, (middle(WIDTH) + middle(WIDTH) // 2, 10))
+
+
+
+        pygame.display.update()
 
 if __name__ == "__main__":
-    main()
+    main()      
