@@ -19,3 +19,7 @@ Pong in different programminglanguages
 - [Choosing a game development language for beginners](https://stackoverflow.com/questions/3981496/game-development-the-language-for-beginners)
 - [Starting to make 2D games in C++](https://gamedev.stackexchange.com/questions/45707/starting-to-make-2d-games-in-c)
 - [Question: is SDL a good choice for getting into 2D? ](https://gamedev.net/forums/topic/645204-question-is-sdl-a-good-choice-for-getting-into-2d/5075975/)
+
+
+TODO (research): 
+- sätt att dela kod med varandra i grupp
