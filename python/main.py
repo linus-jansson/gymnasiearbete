@@ -11,10 +11,8 @@ class Ball:
         self.x = x
         self.y = y
         self.radius = radius
-        self.xSpeed = 0
-        self.ySpeed = 0
 
-        self.speed = 2
+        self.speed = 1
 
         self.direction = [randint(-5, 5), randint(-2, 2)]
 
@@ -33,16 +31,12 @@ class Ball:
         self.x = self.standardX
         self.y = self.standardY
 
-        self.direction = [ -self.direction[0],  randint(-5, 5)]
+        self.direction = [ -self.direction[0],  randint(-2, 2)]
 
-        # Ser till så att direction antingen x eller y aldrig är 0
-        for count, dire in enumerate(self.direction):
-            while dire == 0:
-                print(dire)
-                dire = randint(-5, 5)
-                self.direction[count] = dire
+        while self.direction[1] == 0:
+            self.direction[1] = randint(-2, 2)
 
-        self.speed = 2
+        self.speed = 1
         
 
 
@@ -213,8 +207,6 @@ def main():
 
         screen.blit(p1_score_surface, (middle(middle(WIDTH)), 10))
         screen.blit(p2_score_surface, (middle(WIDTH) + middle(WIDTH) // 2, 10))
-
-
 
         pygame.display.update()
 
