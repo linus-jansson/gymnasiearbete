@@ -6,5 +6,6 @@ På grund av att programering är väldigt subjektivt när de kommer till att ol
 	- [How to share c# source between Unity projects?](https://stackoverflow.com/questions/44601144/how-to-share-c-sharp-source-between-unity-projects)
 	- [Unity teams](https://unity.com/products/unity-teams)
 	- [Untiy Teams](https://unity.com/unity/features/collaborate)
+	- [How do programmers work together on a project?](https://stackoverflow.com/questions/3000190/how-do-programmers-work-together-on-a-project)
 
 
