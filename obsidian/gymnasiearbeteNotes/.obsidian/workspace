@@ -7,8 +7,22 @@
         "id": "bae869f237007ea1",
         "type": "leaf",
         "state": {
-          "type": "empty",
-          "state": {}
+          "type": "markdown",
+          "state": {
+            "file": "Anteckningar.md",
+            "mode": "source"
+          }
+        }
+      },
+      {
+        "id": "b985cd7b50badace",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "Anteckningar.md",
+            "mode": "preview"
+          }
         }
       }
     ],
@@ -65,6 +79,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "Anteckningar.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -83,5 +98,10 @@
     "collapsed": true
   },
   "active": "bae869f237007ea1",
-  "lastOpenFiles": []
+  "lastOpenFiles": [
+    "Anteckningar.md",
+    "Todo.md",
+    "Untitled.md",
+    "Presentation.md"
+  ]
 }
