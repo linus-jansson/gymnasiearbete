@@ -25,11 +25,14 @@ Vi ska göra spelet pong i programmeringspråken C# (unity) och python (pygame).
 
 ## Reflektioner
 
-##### Välja programmeringsspråk
+###### Välja programmeringsspråk
 
 
-##### 
+###### ...
 
+
+## Källor
+- [Acceleration in games](https://gamedev.stackexchange.com/questions/50074/how-to-create-simple-acceleration-in-a-2d-sprite)
 
 
 ## Ordlista
