@@ -59,8 +59,8 @@ class Ball:
             self.direction[1] = -self.direction[1]
 
 
-        self.x += self.direction[0] * self.speed * dt
-        self.y += self.direction[1] * self.speed * dt
+        self.x += self.direction[0] * self.speed
+        self.y += self.direction[1] * self.speed 
     
 
     def move(self):
@@ -93,17 +93,17 @@ class Paddle:
     def show(self):
         self.obj = pygame.draw.rect(self.screen, self.color, (self.xPos, self.yPos, self.width, self.height))
     
-    def update(self, newY):
-        # if (self.y + newY) > screen.width: 
-        # Kontrollerar så att inte spelaren hamnar utanför boxen
-        if self.yPos >= HEIGHT - self.height:
-            self.yPos = HEIGHT - self.height
-        
-        if self.yPos < 0:
-            self.yPos = 0
-        
+    def update(self, dt):
+        # if self.yAcceleration != 0:
+        if self.velocity >= 1:
+            self.velocity = 1
         else:
-            self.yPos += newY
+            self.velocity += self.yAcceleration * dt
+
+        self.yPos += self.velocity * dt
+        # else:
+        #     if self.velocity != 0:
+        #         self.velocity -= 0.1
 
 
     def getObj(self):
@@ -133,7 +133,6 @@ class Game():
         self.font = pygame.font.SysFont('Monospace', 50)
         pygame.display.set_caption("PONG - Created by Linus, Vilhelm and Erik")
 
-        
 
         self.ball = Ball(self.screen, self.WHITE, self.middle(self.WIDTH), self.middle(self.HEIGHT) , 15)
         
@@ -189,8 +188,47 @@ class Game():
 
                 # Kommer bli -1, 0, eller 1 vilket kommer orsaka att paddeln åker upp eller ner
                 # Hanterar vilket håll som paddlarna åker åt
-                self.paddle1.update((key[pygame.K_s] - key[pygame.K_w])*self.dt)
-                self.paddle2.update((key[pygame.K_DOWN] - key[pygame.K_UP])*self.dt)
+
+                if (key[pygame.K_s] - key[pygame.K_w] == 1):
+                    print("p1; down")
+                    self.paddle1.yAcceleration += 0.01
+
+                elif (key[pygame.K_s] - key[pygame.K_w] == -1):
+                    print("p1; up")
+                    self.paddle1.yAcceleration -= 0.01                
+                else:
+                    self.paddle1.yAcceleration = 0
+
+
+                if (key[pygame.K_DOWN] - key[pygame.K_UP] == 1):
+                    print("p2; down")
+                    self.paddle2.yAcceleration += 0.01
+                elif (key[pygame.K_DOWN] - key[pygame.K_UP] == -1):
+                    print("p2; up")
+                    self.paddle2.yAcceleration -= 0.01                
+                else:
+                    self.paddle2.yAcceleration = 0
+
+
+                # if (self.y + newY) > screen.width: 
+                # Kontrollerar så att inte spelaren hamnar utanför boxen
+                if self.paddle1.yPos >= self.HEIGHT - self.paddle1.height:
+                    self.paddle1.yPos = self.HEIGHT - self.paddle1.height
+                
+                elif self.paddle1.yPos < 0:
+                    self.paddle1.yPos = 0
+                
+                else:
+                    self.paddle1.update(self.dt)
+
+                if self.paddle2.yPos >= self.HEIGHT - self.paddle2.height:
+                    self.paddle2.yPos = self.HEIGHT - self.paddle2.height
+                
+                elif self.paddle2.yPos < 0:
+                    self.paddle2.yPos = 0
+                
+                else:
+                    self.paddle2.update(self.dt)
 
                 
                 self.ball.update(self.dt) # Updates ball position
