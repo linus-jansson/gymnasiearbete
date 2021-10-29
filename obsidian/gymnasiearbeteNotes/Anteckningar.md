@@ -35,6 +35,8 @@ Vi ska göra spelet pong i programmeringspråken C# (unity) och python (pygame).
 
 ## Källor
 - [Acceleration in games](https://gamedev.stackexchange.com/questions/50074/how-to-create-simple-acceleration-in-a-2d-sprite)
+- [Friction i spel](https://gamedev.stackexchange.com/questions/37889/friction-in-2d-game/37890?newreg=8ffbc9c16d6b454fa040c256c403fc28)
+
 
 
 ## Ordlista

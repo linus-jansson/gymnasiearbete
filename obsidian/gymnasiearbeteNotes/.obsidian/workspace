@@ -1,22 +1,17 @@
 {
   "main": {
-    "id": "e6b922195c5fde48",
+    "id": "198430d1be212932",
     "type": "split",
     "children": [
       {
-        "id": "3ab28b3ec0ac8443",
+        "id": "88306a2f40d1cf15",
         "type": "leaf",
         "state": {
-          "type": "empty",
-          "state": {}
-        }
-      },
-      {
-        "id": "a525ae51c37124e3",
-        "type": "leaf",
-        "state": {
-          "type": "empty",
-          "state": {}
+          "type": "markdown",
+          "state": {
+            "file": "Anteckningar.md",
+            "mode": "source"
+          }
         }
       }
     ],
@@ -73,6 +68,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "Anteckningar.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -90,10 +86,10 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "3ab28b3ec0ac8443",
+  "active": "88306a2f40d1cf15",
   "lastOpenFiles": [
-    "gymnasienotes.md",
     "Anteckningar.md",
+    "gymnasienotes.md",
     "y=a*sinx+b*cosx.md",
     "Todo.md",
     "Presentation.md"
