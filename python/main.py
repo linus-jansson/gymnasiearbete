@@ -59,10 +59,9 @@ class Ball:
             self.direction[1] = -self.direction[1]
 
 
-        self.x += self.direction[0] * self.speed 
-        self.y += self.direction[1] * self.speed 
+        self.x += self.direction[0] * self.speed * dt
+        self.y += self.direction[1] * self.speed * dt
     
-        self.show()
 
     def move(self):
         pass
@@ -77,38 +76,35 @@ class Paddle:
     def __init__(self, screen, color, x, y, width, height):
         self.screen = screen
         self.color = color
-        self.x = x
-        self.y = y
+        self.xPos = x
+        self.yPos = y
+        self.yAcceleration = 0
         self.score = 0
         self.width = width
         self.height = height
-        self.obj = pygame.Rect((self.x, self.y), (self.width, self.height))
 
-        self.speed = 1
+        self.obj = pygame.Rect((self.xPos, self.yPos), (self.width, self.height))
+        
+
+        self.velocity = 1
 
         self.show()
 
-    # def show(self):
-    #     self.rect = pygame.draw.rect(self.screen, self.color, (self.x, self.y, self.width, self.height))
-    
     def show(self):
-        self.obj = pygame.draw.rect(self.screen, self.color, (self.x, self.y, self.width, self.height))
-
+        self.obj = pygame.draw.rect(self.screen, self.color, (self.xPos, self.yPos, self.width, self.height))
     
-
     def update(self, newY):
         # if (self.y + newY) > screen.width: 
         # Kontrollerar så att inte spelaren hamnar utanför boxen
-        if self.y >= HEIGHT - self.height:
-            self.y = HEIGHT - self.height
+        if self.yPos >= HEIGHT - self.height:
+            self.yPos = HEIGHT - self.height
         
-        if self.y < 0:
-            self.y = 0
+        if self.yPos < 0:
+            self.yPos = 0
         
         else:
-            self.y += newY
+            self.yPos += newY
 
-        self.show()
 
     def getObj(self):
         return self.obj
@@ -162,12 +158,21 @@ class Game():
         self.p2_score_surface = self.font.render(str(self.paddle2.score), False, self.WHITE)
         self.screen.blit(self.p2_score_surface, (self.middle(WIDTH) + self.middle(WIDTH) // 2, 10))
 
+    def update(self):
+        self.screen.fill(self.BLACK)
+
+        self.draw_board()
+
+        self.ball.show()
+
+        self.paddle1.show()
+        self.paddle2.show()
+
+
     def run(self):
         while self.running:
                                 
                 self.dt = self.clock.tick(60)
-
-                self.screen.fill(self.BLACK)
 
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
@@ -184,8 +189,8 @@ class Game():
 
                 # Kommer bli -1, 0, eller 1 vilket kommer orsaka att paddeln åker upp eller ner
                 # Hanterar vilket håll som paddlarna åker åt
-                self.paddle1.update((key[pygame.K_s] - key[pygame.K_w]) * self.dt)
-                self.paddle2.update((key[pygame.K_DOWN] - key[pygame.K_UP]) * self.dt)
+                self.paddle1.update((key[pygame.K_s] - key[pygame.K_w])*self.dt)
+                self.paddle2.update((key[pygame.K_DOWN] - key[pygame.K_UP])*self.dt)
 
                 
                 self.ball.update(self.dt) # Updates ball position
@@ -200,9 +205,9 @@ class Game():
                     self.paddle1.score += 1
                 elif self.ball.x <= 0:
                     self.paddle2.score += 1
-
-                self.draw_board()
-
+                
+                self.update()
+                
                 pygame.display.update()
 
 
