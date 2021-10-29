@@ -46,4 +46,4 @@ Vi ska göra spelet pong i programmeringspråken C# (unity) och python (pygame).
 | Objekt orienterad programering |  ... |
 |Version Control|...|
 |Open source|...|
-|||
+|SDK|...|
