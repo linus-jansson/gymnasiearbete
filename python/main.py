@@ -116,10 +116,6 @@ class Paddle:
     def collide(self, obj2):
         return self.obj.colliderect(obj2)
 
-    def incrementScore(self):
-        self.score += 1
-        return self.score
-
 # DÅLIGT MED GLOBALA VARIABLER
 
 
@@ -201,9 +197,9 @@ class Game():
                     self.ball.speed *= 1.05
 
                 if self.ball.x >= self.WIDTH:
-                    self.paddle1.incrementScore()
+                    self.paddle1.score += 1
                 elif self.ball.x <= 0:
-                    self.paddle2.incrementScore()
+                    self.paddle2.score += 1
 
                 self.draw_board()
 
