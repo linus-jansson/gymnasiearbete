@@ -146,9 +146,7 @@ class Game():
         self.ball = Ball(self.screen, self.WHITE, self.middle(self.WIDTH), self.middle(self.HEIGHT) , 15)
         
         self.paddle1 = Paddle(self.screen, self.WHITE, 15, self.middle(self.HEIGHT) - 60, 20, 120)
-        self.p1_score_surface = self.font.render(str(self.paddle1.score), False, self.WHITE)
         self.paddle2 = Paddle(self.screen, self.WHITE, self.WIDTH - 20 - 15, self.middle(self.HEIGHT) - 60, 20, 120)
-        self.p2_score_surface = self.font.render(str(self.paddle2.score), False, self.WHITE)
 
         self.DEBUG = False
 
@@ -161,6 +159,14 @@ class Game():
 
     def draw_board(self):
         pygame.draw.line(self.screen, self.WHITE, (self.WIDTH//2, 0), (self.WIDTH//2, self.HEIGHT), 5) # middle line
+
+
+        # Scoreboard
+        self.p1_score_surface = self.font.render(str(self.paddle1.score), False, self.WHITE)
+        self.p2_score_surface = self.font.render(str(self.paddle2.score), False, self.WHITE)
+
+        self.screen.blit(self.p1_score_surface, (self.middle(self.middle(WIDTH)), 10)) ## middle(middle(Width)) popega
+        self.screen.blit(self.p2_score_surface, (self.middle(WIDTH) + self.middle(WIDTH) // 2, 10))
 
     def run(self):
         while self.running:
@@ -205,9 +211,6 @@ class Game():
                     self.paddle2.incrementScore()
 
                 self.draw_board()
-
-                self.screen.blit(self.p1_score_surface, (self.middle(self.middle(WIDTH)), 10)) ## middle(middle(Width)) popega
-                self.screen.blit(self.p2_score_surface, (self.middle(WIDTH) + self.middle(WIDTH) // 2, 10))
 
                 pygame.display.update()
 
