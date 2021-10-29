@@ -121,94 +121,99 @@ class Paddle:
 WIDTH = 1080
 HEIGHT = 720
 
-def middle(k):
-    return k // 2
-
-# GÖR OM TILL EN KLASS SEN
-def main():
-
-    pygame.init()
-    running = True
 
 
-    BLACK = (0, 0, 0)
-    WHITE = (255, 255, 255)
-
-    clock = pygame.time.Clock()
-
-
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    pygame.display.set_caption("PONG - Created by Linus, Vilhelm and Erik")
+class Game():
+    def __init__(self, w, h):
+        pygame.init()
+        self.running = True
 
 
+        # CONSTANTS
+        self.WIDTH = w
+        self.HEIGHT = h
 
-    def mid_line():
-        pygame.draw.line(screen, WHITE, (WIDTH//2, 0), (WIDTH//2, HEIGHT), 5)
+        self.BLACK = (0, 0, 0)
+        self.WHITE = (255, 255, 255)
+
+        self.clock = pygame.time.Clock()
+        self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
+        self.font = pygame.font.SysFont('Monospace', 50)
+        pygame.display.set_caption("PONG - Created by Linus, Vilhelm and Erik")
+
         
 
-    ball = Ball(screen, WHITE, middle(WIDTH), middle(HEIGHT) , 15)
-    paddle1 = Paddle(screen, WHITE, 15, middle(HEIGHT) - 60, 20, 120)
-    paddle2 = Paddle( screen, WHITE, WIDTH - 20 - 15, middle(HEIGHT) - 60, 20, 120 )
-
-    DEBUG = False
-
-    WHITE = (255, 255, 255)
-    font = pygame.font.SysFont('Monospace', 50)
-    main_menu = False
-
-
-    # def game_update():
-    #     pass
-    while running:
+        self.ball = Ball(self.screen, self.WHITE, self.middle(self.WIDTH), self.middle(self.HEIGHT) , 15)
         
-        while main_menu:
-            print(main_menu)
+        self.paddle1 = Paddle(self.screen, self.WHITE, 15, self.middle(self.HEIGHT) - 60, 20, 120)
+        self.p1_score_surface = self.font.render(str(self.paddle1.score), False, self.WHITE)
+        self.paddle2 = Paddle(self.screen, self.WHITE, self.WIDTH - 20 - 15, self.middle(self.HEIGHT) - 60, 20, 120)
+        self.p2_score_surface = self.font.render(str(self.paddle2.score), False, self.WHITE)
 
-        p1_score_surface = font.render(str(paddle1.score), False, WHITE)
-        p2_score_surface = font.render(str(paddle2.score), False, WHITE)
-        dt = clock.tick(60)
+        self.DEBUG = False
 
-        screen.fill(BLACK)
+        self.main_menu = False
+        self.dt = 0
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_F11:
-                    DEBUG = not DEBUG
-                    print("DEBUG:", DEBUG)
-                if event.key == pygame.K_ESCAPE:
-                    running = False
-       
-       
-        # Hämtar status på alla knappar
-        key=pygame.key.get_pressed()
 
-        # Kommer bli -1, 0, eller 1 vilket kommer orsaka att paddeln åker upp eller ner
-        # Hanterar vilket håll som paddlarna åker åt
-        paddle1.update((key[pygame.K_s] - key[pygame.K_w]) * dt)
-        paddle2.update((key[pygame.K_DOWN] - key[pygame.K_UP]) *dt)
-        ball.update(dt) # Updates ball position
+    def middle(self, k):
+        return k // 2
 
-        # Kollar ifall bollen kolliderar med någon av paddlarna
-        if (ball.collide(paddle1.getObj()) != 0 or ball.collide(paddle2.getObj()) != 0):
-            print("paddle collission")
-            ball.direction[0] *= -1
-            ball.speed *= 1.05
+    def draw_board(self):
+        pygame.draw.line(self.screen, self.WHITE, (self.WIDTH//2, 0), (self.WIDTH//2, self.HEIGHT), 5) # middle line
 
-        if ball.x >= WIDTH:
-            paddle1.incrementScore()
-        elif ball.x <= 0:
-            paddle2.incrementScore()
+    def run(self):
+        while self.running:
+                
+                # while main_menu:
+                #     print(main_menu)
 
-        mid_line()
+                
+                self.dt = self.clock.tick(60)
 
-        # time.sleep(0.01)
+                self.screen.fill(self.BLACK)
 
-        screen.blit(p1_score_surface, (middle(middle(WIDTH)), 10))
-        screen.blit(p2_score_surface, (middle(WIDTH) + middle(WIDTH) // 2, 10))
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        self.running = False
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_F11:
+                            self.DEBUG = not self.DEBUG
+                            print("DEBUG:", self.DEBUG)
+                        if event.key == pygame.K_ESCAPE:
+                            self.running = False
+            
+            
+                # Hämtar status på alla knappar
+                key=pygame.key.get_pressed()
 
-        pygame.display.update()
+                # Kommer bli -1, 0, eller 1 vilket kommer orsaka att paddeln åker upp eller ner
+                # Hanterar vilket håll som paddlarna åker åt
+                self.paddle1.update((key[pygame.K_s] - key[pygame.K_w]) * self.dt)
+                self.paddle2.update((key[pygame.K_DOWN] - key[pygame.K_UP]) * self.dt)
+                self.ball.update(self.dt) # Updates ball position
+
+                # Kollar ifall bollen kolliderar med någon av paddlarna
+                if (self.ball.collide(self.paddle1.getObj()) != 0 or self.ball.collide(self.paddle2.getObj()) != 0):
+                    print("paddle collission")
+                    self.ball.direction[0] *= -1
+                    self.ball.speed *= 1.05
+
+                if self.ball.x >= WIDTH:
+                    self.paddle1.incrementScore()
+                elif self.ball.x <= 0:
+                    self.paddle2.incrementScore()
+
+                self.draw_board()
+
+                self.screen.blit(self.p1_score_surface, (self.middle(self.middle(WIDTH)), 10)) ## middle(middle(Width)) popega
+                self.screen.blit(self.p2_score_surface, (self.middle(WIDTH) + self.middle(WIDTH) // 2, 10))
+
+                pygame.display.update()
+
+
 
 if __name__ == "__main__":
-    main()      
+    gameInstance = Game(1080, 720)
+
+    gameInstance.run()
