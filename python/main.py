@@ -1,4 +1,4 @@
-
+#!/usr/bin/python3
 import pygame, sys, time
 from random import randint
 
@@ -87,6 +87,7 @@ class Paddle:
         
 
         self.velocity = 0
+        self.friction = 0.001
 
         self.show()
 
@@ -94,25 +95,25 @@ class Paddle:
         self.obj = pygame.draw.rect(self.screen, self.color, (self.xPos, self.yPos, self.width, self.height))
     
     def update(self, dt):
-        # if self.yAcceleration != 0:
-        # if self.velocity >= 0.5:
-        #     self.velocity = -0.5
-        
-        # elif self.velocity <= -0.5:
-        #     self.velocity = -0.5
-        
-        # else:
 
-        if abs(self.velocity) < 0.5:
-            print(self.velocity)
-            self.velocity += self.yAcceleration * dt
+        if abs(self.velocity) > 1:
+            self.yAcceleration = 0
+
+        self.velocity += self.yAcceleration * dt
 
         self.yPos += self.velocity * dt
-        
-        # else:
-        #     if self.velocity != 0:
-        #         self.velocity -= 0.1
 
+        if abs(self.velocity) <= self.friction:
+            self.velocity = 0
+        else:
+
+            if self.velocity >= 0:
+                self.velocity -= self.friction * dt
+            else:
+                self.velocity += self.friction * dt
+
+
+        print(self.velocity)
 
     def getObj(self):
         return self.obj
@@ -150,7 +151,9 @@ class Game():
         self.DEBUG = False
 
         self.main_menu = False
+        
         self.dt = 0
+        self.acceleration_constant = 0.001
 
 
     def middle(self, k):
@@ -198,21 +201,21 @@ class Game():
                 # Hanterar vilket håll som paddlarna åker åt
                 if (key[pygame.K_s] - key[pygame.K_w] == 1):
                     print("p1; down")
-                    self.paddle1.yAcceleration += 0.01
+                    self.paddle1.yAcceleration += self.acceleration_constant
 
                 elif (key[pygame.K_s] - key[pygame.K_w] == -1):
                     print("p1; up")
-                    self.paddle1.yAcceleration -= 0.01                
+                    self.paddle1.yAcceleration -= self.acceleration_constant               
                 else:
                     self.paddle1.yAcceleration = 0
 
 
                 if (key[pygame.K_DOWN] - key[pygame.K_UP] == 1):
                     print("p2; down")
-                    self.paddle2.yAcceleration += 0.01
+                    self.paddle2.yAcceleration += self.acceleration_constant 
                 elif (key[pygame.K_DOWN] - key[pygame.K_UP] == -1):
                     print("p2; up")
-                    self.paddle2.yAcceleration -= 0.01                
+                    self.paddle2.yAcceleration -= self.acceleration_constant      
                 else:
                     self.paddle2.yAcceleration = 0
 
