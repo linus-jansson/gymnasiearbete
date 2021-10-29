@@ -171,6 +171,84 @@ class Game():
 
             print(end="\n\n")
 
+    def paddle_movement(self):
+        # Kontrollerar så att inte spelaren hamnar utanför boxen
+        if self.paddle1.yPos >= self.HEIGHT - self.paddle1.height:
+            self.paddle1.yPos = self.HEIGHT - self.paddle1.height
+        
+        if self.paddle1.yPos < 0:
+            self.paddle1.yPos = 0
+        
+        else:
+            self.paddle1.update(self.dt)
+
+        if self.paddle2.yPos >= self.HEIGHT - self.paddle2.height:
+            self.paddle2.yPos = self.HEIGHT - self.paddle2.height
+        
+        if self.paddle2.yPos < 0:
+            self.paddle2.yPos = 0
+        
+        else:
+            self.paddle2.update(self.dt)
+
+        # Hämtar status på alla knappar
+        key = pygame.key.get_pressed()
+
+        # Kommer bli -1, 0, eller 1 vilket kommer orsaka att paddeln åker upp eller ner
+        # Hanterar vilket håll som paddlarna åker åt
+        if (key[pygame.K_s] - key[pygame.K_w] == 1):
+            self.paddle1.yAcceleration += self.acceleration_constant
+
+        elif (key[pygame.K_s] - key[pygame.K_w] == -1):
+            self.paddle1.yAcceleration -= self.acceleration_constant               
+        else:
+            self.paddle1.yAcceleration = 0
+        
+
+        if (key[pygame.K_DOWN] - key[pygame.K_UP] == 1):
+            self.paddle2.yAcceleration += self.acceleration_constant 
+        elif (key[pygame.K_DOWN] - key[pygame.K_UP] == -1):
+            self.paddle2.yAcceleration -= self.acceleration_constant      
+        else:
+            self.paddle2.yAcceleration = 0
+
+    def ball_boundries(self):
+        # Om x positionen på bollen är större eller lika med bredden
+        # Om x positionen på bollen är mindre eller lika med bredden
+        if self.ball.x >= self.WIDTH:
+            self.paddle1.score += 1
+            self.ball.reset() # Så återställer vi bollen
+        elif self.ball.x <= 0:
+            self.paddle2.score += 1
+            self.ball.reset() # Så återställer vi bollen
+
+        if self.ball.y >= self.HEIGHT:
+            self.ball.y = self.HEIGHT - self.ball.radius
+            self.ball.direction[1] = -self.ball.direction[1]
+
+        # Om y positionen på bollen är mindre eller lika med bredden
+        if self.ball.y <= 0:
+            self.ball.y = self.ball.radius
+            self.ball.direction[1] = -self.ball.direction[1]
+
+        # Kollar ifall bollen kolliderar med någon av paddlarna
+        if self.ball.collide(self.paddle1.getObj()):
+            
+            self.ball.direction[0] = -self.ball.direction[0]
+            
+            self.ball.x += self.paddle1.width
+
+            self.ball.velocity *= 1.1
+        
+        elif self.ball.collide(self.paddle2.getObj()):
+            self.ball.direction[0] = -self.ball.direction[0]
+            
+            self.ball.x -= self.paddle2.width
+
+            self.ball.velocity *= 1.1
+       
+
+
 
     def run(self):
         while self.running:
@@ -186,87 +264,12 @@ class Game():
                             print("DEBUG:", self.DEBUG)
                         if event.key == pygame.K_ESCAPE:
                             self.running = False
-            
-                # Om x positionen på bollen är större eller lika med bredden
-                # Om x positionen på bollen är mindre eller lika med bredden
-                if self.ball.x >= self.WIDTH or self.ball.x <= 0:
-                    self.ball.reset() # Så återställer vi bollen
-
-                if self.ball.y >= self.HEIGHT:
-                    self.ball.y = self.HEIGHT - self.ball.radius
-                    self.ball.direction[1] = -self.ball.direction[1]
-
-                # Om y positionen på bollen är mindre eller lika med bredden
-                if self.ball.y <= 0:
-                    self.ball.y = self.ball.radius
-                    self.ball.direction[1] = -self.ball.direction[1]
-
-
-                # Hämtar status på alla knappar
-                key=pygame.key.get_pressed()
-
-                # Kommer bli -1, 0, eller 1 vilket kommer orsaka att paddeln åker upp eller ner
-                # Hanterar vilket håll som paddlarna åker åt
-                if (key[pygame.K_s] - key[pygame.K_w] == 1):
-                    self.paddle1.yAcceleration += self.acceleration_constant
-
-                elif (key[pygame.K_s] - key[pygame.K_w] == -1):
-                    self.paddle1.yAcceleration -= self.acceleration_constant               
-                else:
-                    self.paddle1.yAcceleration = 0
-                
-
-                if (key[pygame.K_DOWN] - key[pygame.K_UP] == 1):
-                    self.paddle2.yAcceleration += self.acceleration_constant 
-                elif (key[pygame.K_DOWN] - key[pygame.K_UP] == -1):
-                    self.paddle2.yAcceleration -= self.acceleration_constant      
-                else:
-                    self.paddle2.yAcceleration = 0
-
-
-                # if (self.y + newY) > screen.width: 
-                # Kontrollerar så att inte spelaren hamnar utanför boxen
-                if self.paddle1.yPos >= self.HEIGHT - self.paddle1.height:
-                    self.paddle1.yPos = self.HEIGHT - self.paddle1.height
-                
-                if self.paddle1.yPos < 0:
-                    self.paddle1.yPos = 0
-                
-                else:
-                    self.paddle1.update(self.dt)
-
-                if self.paddle2.yPos >= self.HEIGHT - self.paddle2.height:
-                    self.paddle2.yPos = self.HEIGHT - self.paddle2.height
-                
-                if self.paddle2.yPos < 0:
-                    self.paddle2.yPos = 0
-                
-                else:
-                    self.paddle2.update(self.dt)
-
                 
                 self.ball.update(self.dt) # Updates ball position
 
-                # Kollar ifall bollen kolliderar med någon av paddlarna
-                if self.ball.collide(self.paddle1.getObj()):
-                    
-                    self.ball.direction[0] = -self.ball.direction[0]
-                    
-                    self.ball.x += self.paddle1.width
 
-                    self.ball.velocity *= 1.1
-                
-                elif self.ball.collide(self.paddle2.getObj()):
-                    self.ball.direction[0] = -self.ball.direction[0]
-                    
-                    self.ball.x -= self.paddle2.width
-
-                    self.ball.velocity *= 1.1
-                    
-                if self.ball.x >= self.WIDTH:
-                    self.paddle1.score += 1
-                elif self.ball.x <= 0:
-                    self.paddle2.score += 1
+                self.paddle_movement()
+                self.ball_boundries()
                 
                 self.update()
         
@@ -275,12 +278,12 @@ class Game():
                         "player1": "",
                         "Velocity": self.paddle1.velocity,
                         "Acceleration": self.paddle1.yAcceleration,
-                        "KeyDown": (key[pygame.K_s] - key[pygame.K_w]),
+                        # "KeyDown": (key[pygame.K_s] - key[pygame.K_w]),
                         "ColWithBall": (self.ball.collide(self.paddle1.getObj())),
                         "player2": "",
                         "Velocity2": self.paddle2.velocity,
                         "Acceleration2": self.paddle2.yAcceleration,
-                        "KeyDown2": (key[pygame.K_DOWN] - key[pygame.K_UP]),
+                        # "KeyDown2": (key[pygame.K_DOWN] - key[pygame.K_UP]),
                         "ColWithBall2": (self.ball.collide(self.paddle2.getObj()))
                     }
 
