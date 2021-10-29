@@ -18,7 +18,8 @@ Vi ska göra spelet pong i programmeringspråken C# (unity) och python (pygame).
 - Spel biblioteket [Pygame](https://www.pygame.org/news) till python
 - C# i [Unity games](https://unity.com/solutions/game) till spelet som spelas mh.a next-mind
 - [next-mind](https://www.next-mind.com/)
--  
+-  [github](https://github.com/)
+-  [git](https://git-scm.com/)
 
 ## Resultat
 
@@ -28,7 +29,8 @@ Vi ska göra spelet pong i programmeringspråken C# (unity) och python (pygame).
 ###### Välja programmeringsspråk
 
 
-###### ...
+###### Samarbeta med samma projekt i grupp
+
 
 
 ## Källor
@@ -41,4 +43,5 @@ Vi ska göra spelet pong i programmeringspråken C# (unity) och python (pygame).
 |--------------|:-----:|
 | Objekt orienterad programering |  ... |
 |Version Control|...|
+|Open source|...|
 |||

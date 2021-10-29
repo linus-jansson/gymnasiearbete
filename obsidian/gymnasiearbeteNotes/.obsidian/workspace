@@ -7,11 +7,16 @@
         "id": "3ab28b3ec0ac8443",
         "type": "leaf",
         "state": {
-          "type": "markdown",
-          "state": {
-            "file": "Anteckningar.md",
-            "mode": "source"
-          }
+          "type": "empty",
+          "state": {}
+        }
+      },
+      {
+        "id": "a525ae51c37124e3",
+        "type": "leaf",
+        "state": {
+          "type": "empty",
+          "state": {}
         }
       }
     ],
@@ -68,7 +73,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Anteckningar.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -88,8 +92,8 @@
   },
   "active": "3ab28b3ec0ac8443",
   "lastOpenFiles": [
+    "gymnasienotes.md",
     "Anteckningar.md",
-    "Untitled.md",
     "y=a*sinx+b*cosx.md",
     "Todo.md",
     "Presentation.md"
