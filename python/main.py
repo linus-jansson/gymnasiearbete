@@ -41,23 +41,6 @@ class Ball:
 
 
     def update(self, dt):
-        # Om x positionen på bollen är större eller lika med bredden
-        # Om x positionen på bollen är mindre eller lika med bredden
-        if self.x >= WIDTH or self.x <= 0:
-            self.reset()
-            
-            # time.sleep(0.5)
-            
-
-        if self.y >= HEIGHT:
-            self.y = HEIGHT - self.radius
-            self.direction[1] = -self.direction[1]
-
-        # Om y positionen på bollen är mindre eller lika med bredden
-        if self.y <= 0:
-            self.y = self.radius
-            self.direction[1] = -self.direction[1]
-
 
         self.x += self.direction[0] * self.speed
         self.y += self.direction[1] * self.speed 
@@ -163,10 +146,10 @@ class Game():
         pygame.draw.line(self.screen, self.WHITE, (self.WIDTH//2, 0), (self.WIDTH//2, self.HEIGHT), 5) # middle line
 
         self.p1_score_surface = self.font.render(str(self.paddle1.score), False, self.WHITE)
-        self.screen.blit(self.p1_score_surface, (self.middle(self.middle(WIDTH)), 10)) ## middle(middle(Width)) popega
+        self.screen.blit(self.p1_score_surface, (self.middle(self.middle(self.WIDTH)), 10)) ## middle(middle(Width)) popega
 
         self.p2_score_surface = self.font.render(str(self.paddle2.score), False, self.WHITE)
-        self.screen.blit(self.p2_score_surface, (self.middle(WIDTH) + self.middle(WIDTH) // 2, 10))
+        self.screen.blit(self.p2_score_surface, (self.middle(self.WIDTH) + self.middle(self.WIDTH) // 2, 10))
 
     def update(self):
         self.screen.fill(self.BLACK)
@@ -207,6 +190,21 @@ class Game():
                         if event.key == pygame.K_ESCAPE:
                             self.running = False
             
+                # Om x positionen på bollen är större eller lika med bredden
+                # Om x positionen på bollen är mindre eller lika med bredden
+                if self.ball.x >= self.WIDTH or self.ball.x <= 0:
+                    self.ball.reset()
+
+                if self.ball.y >= self.HEIGHT:
+                    self.ball.y = self.HEIGHT - self.ball.radius
+                    self.ball.direction[1] = -self.ball.direction[1]
+
+                # Om y positionen på bollen är mindre eller lika med bredden
+                if self.ball.y <= 0:
+                    self.ball.y = self.ball.radius
+                    self.ball.direction[1] = -self.ball.direction[1]
+
+
                 # Hämtar status på alla knappar
                 key=pygame.key.get_pressed()
 
@@ -257,11 +255,12 @@ class Game():
                     
                     self.ball.direction[0] *= -1
                     self.ball.speed *= 1.05
+                    
 
-                    if self.ball.x >= self.WIDTH:
-                        self.paddle1.score += 1
-                    elif self.ball.x <= 0:
-                        self.paddle2.score += 1
+                if self.ball.x >= self.WIDTH:
+                    self.paddle1.score += 1
+                elif self.ball.x <= 0:
+                    self.paddle2.score += 1
                 
                 self.update()
         
@@ -284,9 +283,7 @@ class Game():
 
 
 if __name__ == "__main__":
-    WIDTH = 1080
-    HEIGHT = 720
 
-    gameInstance = Game(WIDTH, HEIGHT)
+    gameInstance = Game(1080, 720)
 
     gameInstance.run()
