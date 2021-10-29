@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-import pygame, sys, time
+import pygame, sys, time, os
 from random import randint
 
 class Ball:
@@ -113,7 +113,7 @@ class Paddle:
                 self.velocity += self.friction * dt
 
 
-        print(self.velocity)
+        
 
     def getObj(self):
         return self.obj
@@ -178,6 +178,19 @@ class Game():
         self.paddle1.show()
         self.paddle2.show()
 
+    def print_DEBUG(self, info):
+            os.system("clear")
+            it = 0
+            for key, val in info.items():
+                if  it == 0 or it == 4 or it == 8:
+                    print('='*5)
+                print(f"{key}: {val}")
+                
+                it += 1
+                
+
+            print(end="\n\n")
+
 
     def run(self):
         while self.running:
@@ -200,21 +213,17 @@ class Game():
                 # Kommer bli -1, 0, eller 1 vilket kommer orsaka att paddeln åker upp eller ner
                 # Hanterar vilket håll som paddlarna åker åt
                 if (key[pygame.K_s] - key[pygame.K_w] == 1):
-                    print("p1; down")
                     self.paddle1.yAcceleration += self.acceleration_constant
 
                 elif (key[pygame.K_s] - key[pygame.K_w] == -1):
-                    print("p1; up")
                     self.paddle1.yAcceleration -= self.acceleration_constant               
                 else:
                     self.paddle1.yAcceleration = 0
-
+                
 
                 if (key[pygame.K_DOWN] - key[pygame.K_UP] == 1):
-                    print("p2; down")
                     self.paddle2.yAcceleration += self.acceleration_constant 
                 elif (key[pygame.K_DOWN] - key[pygame.K_UP] == -1):
-                    print("p2; up")
                     self.paddle2.yAcceleration -= self.acceleration_constant      
                 else:
                     self.paddle2.yAcceleration = 0
@@ -245,16 +254,30 @@ class Game():
 
                 # Kollar ifall bollen kolliderar med någon av paddlarna
                 if (self.ball.collide(self.paddle1.getObj()) != 0 or self.ball.collide(self.paddle2.getObj()) != 0):
-                    print("paddle collission")
+                    
                     self.ball.direction[0] *= -1
                     self.ball.speed *= 1.05
 
-                if self.ball.x >= self.WIDTH:
-                    self.paddle1.score += 1
-                elif self.ball.x <= 0:
-                    self.paddle2.score += 1
+                    if self.ball.x >= self.WIDTH:
+                        self.paddle1.score += 1
+                    elif self.ball.x <= 0:
+                        self.paddle2.score += 1
                 
                 self.update()
+        
+                if self.DEBUG: 
+                    info = {
+                        "player1": "",
+                        "Velocity": self.paddle1.velocity,
+                        "Acceleration": self.paddle1.yAcceleration,
+                        "KeyDown": (key[pygame.K_s] - key[pygame.K_w]),
+                        "player2": "",
+                        "Velocity2": self.paddle2.velocity,
+                        "Acceleration2": self.paddle2.yAcceleration,
+                        "KeyDown2": (key[pygame.K_DOWN] - key[pygame.K_UP])
+                    }
+
+                    self.print_DEBUG(info)
                 
                 pygame.display.update()
 
