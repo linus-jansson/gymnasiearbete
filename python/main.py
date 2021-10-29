@@ -14,7 +14,12 @@ class Ball:
 
         self.speed = 1
 
+
         self.direction = [randint(-5, 5), randint(-2, 2)]
+
+        while self.direction[1] == 0 or self.direction[0] == 0:
+            self.direction[1] = randint(-2, 2)
+            self.direction[0] = randint(-5, 5)
 
         self.obj = pygame.draw.circle(self.screen, self.color, (self.x, self.y), self.radius)
 
@@ -33,8 +38,9 @@ class Ball:
 
         self.direction = [ -self.direction[0],  randint(-2, 2)]
 
-        while self.direction[1] == 0:
+        while self.direction[1] == 0 or self.direction[0] == 0:
             self.direction[1] = randint(-2, 2)
+            self.direction[0] = randint(-5, 5)
 
         self.speed = 1
         
@@ -45,7 +51,6 @@ class Ball:
         self.x += self.direction[0] * self.speed
         self.y += self.direction[1] * self.speed 
     
-
     def move(self):
         pass
 
@@ -165,12 +170,11 @@ class Game():
             os.system("clear")
             it = 0
             for key, val in info.items():
-                if  it == 0 or it == 4 or it == 8:
+                if  it == 0 or it == 5 or it == 9:
                     print('='*5)
                 print(f"{key}: {val}")
                 
                 it += 1
-                
 
             print(end="\n\n")
 
@@ -193,7 +197,7 @@ class Game():
                 # Om x positionen på bollen är större eller lika med bredden
                 # Om x positionen på bollen är mindre eller lika med bredden
                 if self.ball.x >= self.WIDTH or self.ball.x <= 0:
-                    self.ball.reset()
+                    self.ball.reset() # Så återställer vi bollen
 
                 if self.ball.y >= self.HEIGHT:
                     self.ball.y = self.HEIGHT - self.ball.radius
@@ -251,12 +255,11 @@ class Game():
                 self.ball.update(self.dt) # Updates ball position
 
                 # Kollar ifall bollen kolliderar med någon av paddlarna
-                if (self.ball.collide(self.paddle1.getObj()) != 0 or self.ball.collide(self.paddle2.getObj()) != 0):
+                if self.ball.collide(self.paddle1.getObj()) or self.ball.collide(self.paddle2.getObj()):
                     
-                    self.ball.direction[0] *= -1
+                    self.ball.direction[0] = -self.ball.direction[0]
                     self.ball.speed *= 1.05
                     
-
                 if self.ball.x >= self.WIDTH:
                     self.paddle1.score += 1
                 elif self.ball.x <= 0:
@@ -270,10 +273,12 @@ class Game():
                         "Velocity": self.paddle1.velocity,
                         "Acceleration": self.paddle1.yAcceleration,
                         "KeyDown": (key[pygame.K_s] - key[pygame.K_w]),
+                        "ColWithBall": (self.ball.collide(self.paddle1.getObj())),
                         "player2": "",
                         "Velocity2": self.paddle2.velocity,
                         "Acceleration2": self.paddle2.yAcceleration,
-                        "KeyDown2": (key[pygame.K_DOWN] - key[pygame.K_UP])
+                        "KeyDown2": (key[pygame.K_DOWN] - key[pygame.K_UP]),
+                        "ColWithBall2": (self.ball.collide(self.paddle2.getObj()))
                     }
 
                     self.print_DEBUG(info)
