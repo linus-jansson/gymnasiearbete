@@ -86,7 +86,7 @@ class Paddle:
         self.obj = pygame.Rect((self.xPos, self.yPos), (self.width, self.height))
         
 
-        self.velocity = 1
+        self.velocity = 0
 
         self.show()
 
@@ -95,12 +95,20 @@ class Paddle:
     
     def update(self, dt):
         # if self.yAcceleration != 0:
-        if self.velocity >= 1:
-            self.velocity = 1
-        else:
+        # if self.velocity >= 0.5:
+        #     self.velocity = -0.5
+        
+        # elif self.velocity <= -0.5:
+        #     self.velocity = -0.5
+        
+        # else:
+
+        if abs(self.velocity) < 0.5:
+            print(self.velocity)
             self.velocity += self.yAcceleration * dt
 
         self.yPos += self.velocity * dt
+        
         # else:
         #     if self.velocity != 0:
         #         self.velocity -= 0.1
@@ -188,7 +196,6 @@ class Game():
 
                 # Kommer bli -1, 0, eller 1 vilket kommer orsaka att paddeln åker upp eller ner
                 # Hanterar vilket håll som paddlarna åker åt
-
                 if (key[pygame.K_s] - key[pygame.K_w] == 1):
                     print("p1; down")
                     self.paddle1.yAcceleration += 0.01
@@ -215,7 +222,7 @@ class Game():
                 if self.paddle1.yPos >= self.HEIGHT - self.paddle1.height:
                     self.paddle1.yPos = self.HEIGHT - self.paddle1.height
                 
-                elif self.paddle1.yPos < 0:
+                if self.paddle1.yPos < 0:
                     self.paddle1.yPos = 0
                 
                 else:
@@ -224,7 +231,7 @@ class Game():
                 if self.paddle2.yPos >= self.HEIGHT - self.paddle2.height:
                     self.paddle2.yPos = self.HEIGHT - self.paddle2.height
                 
-                elif self.paddle2.yPos < 0:
+                if self.paddle2.yPos < 0:
                     self.paddle2.yPos = 0
                 
                 else:
