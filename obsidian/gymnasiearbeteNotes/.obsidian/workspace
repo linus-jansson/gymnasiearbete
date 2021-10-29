@@ -4,14 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "3ab28b3ec0ac8443",
+        "id": "8ecc084ae1cf9614",
         "type": "leaf",
         "state": {
-          "type": "markdown",
-          "state": {
-            "file": "Anteckningar.md",
-            "mode": "source"
-          }
+          "type": "empty",
+          "state": {}
         }
       }
     ],
@@ -68,7 +65,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Anteckningar.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -86,7 +82,7 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "3ab28b3ec0ac8443",
+  "active": "8ecc084ae1cf9614",
   "lastOpenFiles": [
     "Anteckningar.md",
     "Untitled.md",
