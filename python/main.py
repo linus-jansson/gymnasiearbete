@@ -64,6 +64,9 @@ class Ball:
     
         self.show()
 
+    def move(self):
+        pass
+
     def getObj(self):
         return self.obj
     
@@ -118,9 +121,6 @@ class Paddle:
         return self.score
 
 # DÅLIGT MED GLOBALA VARIABLER
-WIDTH = 1080
-HEIGHT = 720
-
 
 
 class Game():
@@ -146,9 +146,7 @@ class Game():
         self.ball = Ball(self.screen, self.WHITE, self.middle(self.WIDTH), self.middle(self.HEIGHT) , 15)
         
         self.paddle1 = Paddle(self.screen, self.WHITE, 15, self.middle(self.HEIGHT) - 60, 20, 120)
-        self.p1_score_surface = self.font.render(str(self.paddle1.score), False, self.WHITE)
         self.paddle2 = Paddle(self.screen, self.WHITE, self.WIDTH - 20 - 15, self.middle(self.HEIGHT) - 60, 20, 120)
-        self.p2_score_surface = self.font.render(str(self.paddle2.score), False, self.WHITE)
 
         self.DEBUG = False
 
@@ -162,13 +160,15 @@ class Game():
     def draw_board(self):
         pygame.draw.line(self.screen, self.WHITE, (self.WIDTH//2, 0), (self.WIDTH//2, self.HEIGHT), 5) # middle line
 
+        self.p1_score_surface = self.font.render(str(self.paddle1.score), False, self.WHITE)
+        self.screen.blit(self.p1_score_surface, (self.middle(self.middle(WIDTH)), 10)) ## middle(middle(Width)) popega
+
+        self.p2_score_surface = self.font.render(str(self.paddle2.score), False, self.WHITE)
+        self.screen.blit(self.p2_score_surface, (self.middle(WIDTH) + self.middle(WIDTH) // 2, 10))
+
     def run(self):
         while self.running:
-                
-                # while main_menu:
-                #     print(main_menu)
-
-                
+                                
                 self.dt = self.clock.tick(60)
 
                 self.screen.fill(self.BLACK)
@@ -183,7 +183,6 @@ class Game():
                         if event.key == pygame.K_ESCAPE:
                             self.running = False
             
-            
                 # Hämtar status på alla knappar
                 key=pygame.key.get_pressed()
 
@@ -191,6 +190,8 @@ class Game():
                 # Hanterar vilket håll som paddlarna åker åt
                 self.paddle1.update((key[pygame.K_s] - key[pygame.K_w]) * self.dt)
                 self.paddle2.update((key[pygame.K_DOWN] - key[pygame.K_UP]) * self.dt)
+
+                
                 self.ball.update(self.dt) # Updates ball position
 
                 # Kollar ifall bollen kolliderar med någon av paddlarna
@@ -199,21 +200,21 @@ class Game():
                     self.ball.direction[0] *= -1
                     self.ball.speed *= 1.05
 
-                if self.ball.x >= WIDTH:
+                if self.ball.x >= self.WIDTH:
                     self.paddle1.incrementScore()
                 elif self.ball.x <= 0:
                     self.paddle2.incrementScore()
 
                 self.draw_board()
 
-                self.screen.blit(self.p1_score_surface, (self.middle(self.middle(WIDTH)), 10)) ## middle(middle(Width)) popega
-                self.screen.blit(self.p2_score_surface, (self.middle(WIDTH) + self.middle(WIDTH) // 2, 10))
-
                 pygame.display.update()
 
 
 
 if __name__ == "__main__":
-    gameInstance = Game(1080, 720)
+    WIDTH = 1080
+    HEIGHT = 720
+
+    gameInstance = Game(WIDTH, HEIGHT)
 
     gameInstance.run()
