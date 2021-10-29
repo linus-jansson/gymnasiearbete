@@ -12,7 +12,7 @@ class Ball:
         self.y = y
         self.radius = radius
 
-        self.speed = 1
+        self.velocity = 0.1
 
 
         self.direction = [randint(-5, 5), randint(-2, 2)]
@@ -36,23 +36,18 @@ class Ball:
         self.x = self.standardX
         self.y = self.standardY
 
-        self.direction = [ -self.direction[0],  randint(-2, 2)]
+        self.direction = [ -self.direction[0],  randint(-1, 1)]
 
         while self.direction[1] == 0 or self.direction[0] == 0:
-            self.direction[1] = randint(-2, 2)
-            self.direction[0] = randint(-5, 5)
+            self.direction[1] = randint(-1, 1)
+            self.direction[0] = randint(-1, 1)
 
-        self.speed = 1
-        
+        self.velocity = 0.1
 
 
     def update(self, dt):
-
-        self.x += self.direction[0] * self.speed
-        self.y += self.direction[1] * self.speed 
-    
-    def move(self):
-        pass
+        self.x += self.direction[0] * self.velocity * dt
+        self.y += self.direction[1] * self.velocity * dt
 
     def getObj(self):
         return self.obj
@@ -93,14 +88,12 @@ class Paddle:
 
         if abs(self.velocity) <= self.friction:
             self.velocity = 0
-        else:
 
+        else:
             if self.velocity >= 0:
                 self.velocity -= self.friction * dt
             else:
                 self.velocity += self.friction * dt
-
-
         
 
     def getObj(self):
@@ -141,7 +134,7 @@ class Game():
         self.main_menu = False
         
         self.dt = 0
-        self.acceleration_constant = 0.001
+        self.acceleration_constant = 0.0005
 
 
     def middle(self, k):
@@ -255,10 +248,20 @@ class Game():
                 self.ball.update(self.dt) # Updates ball position
 
                 # Kollar ifall bollen kolliderar med någon av paddlarna
-                if self.ball.collide(self.paddle1.getObj()) or self.ball.collide(self.paddle2.getObj()):
+                if self.ball.collide(self.paddle1.getObj()):
                     
                     self.ball.direction[0] = -self.ball.direction[0]
-                    self.ball.speed *= 1.05
+                    
+                    self.ball.x += self.paddle1.width
+
+                    self.ball.velocity *= 1.1
+                
+                elif self.ball.collide(self.paddle2.getObj()):
+                    self.ball.direction[0] = -self.ball.direction[0]
+                    
+                    self.ball.x -= self.paddle2.width
+
+                    self.ball.velocity *= 1.1
                     
                 if self.ball.x >= self.WIDTH:
                     self.paddle1.score += 1
