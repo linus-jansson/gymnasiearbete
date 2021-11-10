@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.nextmind.unitysdk": {
+      "version": "1.5.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "http://registry.npmjs.com"
+    },
     "com.unity.2d.animation": {
       "version": "5.0.7",
       "depth": 0,
