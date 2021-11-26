@@ -57,11 +57,12 @@
   <ItemGroup>
     <Compile Include="Assets\Script\PlayerPaddle.cs" />
     <Compile Include="Assets\Script\Paddle.cs" />
+    <Compile Include="Assets\Script\ScoringZone.cs" />
+    <Compile Include="Assets\Script\GameManager.cs" />
     <Compile Include="Assets\Script\Ball.cs" />
     <Compile Include="Assets\Script\ComputerPaddle.cs" />
     <Compile Include="Assets\Script\BouncySurface.cs" />
-    <Compile Include="Assets\Script\GameManager.cs" />
-    <Compile Include="Assets\Script\ScoringZone.cs" />
+    <Compile Include="Assets\Script\NextMind.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -285,6 +286,9 @@
     </Reference>
     <Reference Include="UnityEditor.UnityConnectModule">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2020.3.20f1\Editor\Data\Managed\UnityEngine\UnityEditor.UnityConnectModule.dll</HintPath>
+    </Reference>
+    <Reference Include="NextMind">
+      <HintPath>Library\PackageCache\com.nextmind.unitysdk@1.5.0\Runtime\Plugins\NextMind.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2020.3.20f1\Editor\Data\NetStandard\ref\2.0.0\netstandard.dll</HintPath>
@@ -642,6 +646,9 @@
     </Reference>
     <Reference Include="Unity.2D.PixelPerfect">
       <HintPath>Library\ScriptAssemblies\Unity.2D.PixelPerfect.dll</HintPath>
+    </Reference>
+    <Reference Include="NextMind.UnitySDK.Runtime">
+      <HintPath>Library\ScriptAssemblies\NextMind.UnitySDK.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Tilemap.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Tilemap.Editor.dll</HintPath>
