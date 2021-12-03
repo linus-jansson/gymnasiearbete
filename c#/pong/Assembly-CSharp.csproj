@@ -57,12 +57,13 @@
   <ItemGroup>
     <Compile Include="Assets\Script\PlayerPaddle.cs" />
     <Compile Include="Assets\Script\Paddle.cs" />
+    <Compile Include="Assets\Script\NextMind.cs" />
     <Compile Include="Assets\Script\ScoringZone.cs" />
     <Compile Include="Assets\Script\GameManager.cs" />
     <Compile Include="Assets\Script\Ball.cs" />
     <Compile Include="Assets\Script\ComputerPaddle.cs" />
     <Compile Include="Assets\Script\BouncySurface.cs" />
-    <Compile Include="Assets\Script\NextMind.cs" />
+    <Compile Include="Assets\FArea.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

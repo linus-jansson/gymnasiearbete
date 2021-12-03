@@ -8,16 +8,34 @@ public class PlayerPaddle : Paddle
     {
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
         {
-            this.direction = Vector2.up;
+            //this.direction = Vector2.up;
+            this.movePaddleTop();
         }
         else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
         {
-            this.direction = Vector2.down;
+            //this.direction = Vector2.down;
+            this.movePaddleBottom();
         }
         else
         {
-            this.direction = Vector2.zero;
+            //this.direction = Vector2.zero;
+            this.movePaddleMiddle();
         }
+    }
+
+    public void movePaddleTop()
+    {
+        this.rigidbody.position = new Vector2(this.rigidbody.position.x, 3.4f);
+    }
+
+    public void movePaddleMiddle()
+    {
+        this.rigidbody.position = new Vector2(this.rigidbody.position.x, 0f);
+    }
+
+    public void movePaddleBottom()
+    {
+        this.rigidbody.position = new Vector2(this.rigidbody.position.x, -3.4f);
     }
 
     private void FixedUpdate()
