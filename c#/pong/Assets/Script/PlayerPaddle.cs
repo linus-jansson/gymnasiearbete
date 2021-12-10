@@ -52,12 +52,6 @@ public class PlayerPaddle : Paddle
                 this.pos = "down";
             }
         }
-        //else
-        //{
-        //    //this.direction = Vector2.zero;
-        //    this.pos = "middle";
-        //}
-
     }
 
     public void movePaddleTop()
@@ -70,7 +64,7 @@ public class PlayerPaddle : Paddle
     public void movePaddleMiddle()
     {
         this.rigidbody.position = new Vector2(this.rigidbody.position.x, 0f);
-        Debug.Log("down");
+        Debug.Log("middle");
         this.pos = "middle";
 
     }
@@ -78,7 +72,7 @@ public class PlayerPaddle : Paddle
     public void movePaddleBottom()
     {
         this.rigidbody.position = new Vector2(this.rigidbody.position.x, -3.4f);
-        Debug.Log("middle");
+        Debug.Log("down");
         this.pos = "down";
     }
 
